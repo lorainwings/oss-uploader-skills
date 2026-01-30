@@ -281,7 +281,7 @@
         </div>
 
         <div class="grid" id="fileGrid">
-            <!-- Files will be inserted here -->
+            <!-- 文件列表将在此处插入 -->
         </div>
     </div>
 
@@ -298,7 +298,7 @@
     </div>
 
     <script>
-        // {{FILES_DATA}} will be replaced with actual data
+        // {{FILES_DATA}} 将被替换为实际数据
         const files = {{FILES_DATA}};
 
         function isImage(filename) {
@@ -375,21 +375,21 @@
             }, 3000);
         }
 
-        // Close modal on background click
+        // 点击背景关闭模态框
         document.getElementById('modal').addEventListener('click', (e) => {
             if (e.target.id === 'modal') {
                 closeModal();
             }
         });
 
-        // Close modal on ESC key
+        // 按 ESC 键关闭模态框
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
             }
         });
 
-        // Initialize
+        // 初始化
         renderFiles();
     </script>
 </body>
