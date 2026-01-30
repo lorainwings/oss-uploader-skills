@@ -169,24 +169,55 @@ When executing this skill:
 3. Understand the user's upload requirements
 4. Construct the appropriate command with options
 5. Execute the upload and verify success
-6. **IMPORTANT**: After successful upload, ALWAYS read the `.oss-uploader-mapping.json` file and display URLs in a clean, compact format:
-   - Display each file's URL on a single line without extra blank lines
-   - Use green color for URLs using ANSI escape codes: `\033[32m[URL]\033[0m`
-   - Format: `filename: [green URL]`
-   - Do NOT use markdown tables or HTML span tags
-   - Keep output compact with no extra spacing between entries
+6. **IMPORTANT**: After successful upload, ALWAYS read the `.oss-uploader-mapping.json` file and:
+   - Display URLs in terminal using green ANSI color codes
+   - Generate an HTML preview page with the uploaded files
+   - Automatically open the preview in the default browser
 7. Provide the mapping file location if generated
 8. Offer next steps (e.g., CDN configuration, URL usage)
 
-### Output Format Example
+### Terminal Output Format
 
-After upload completion, display URLs in this compact format:
+Display URLs in this compact format:
 
 ```
 ✓ 上传成功！
 
 example.png: \033[32mhttps://bucket.oss-region.aliyuncs.com/path/example.hash.png\033[0m
 example2.png: \033[32mhttps://bucket.oss-region.aliyuncs.com/path/example2.hash.png\033[0m
+
+🌐 正在生成预览页面...
 ```
 
-Use ANSI green color code (\033[32m) for better terminal compatibility.
+### HTML Preview Generation
+
+After displaying terminal output, generate an HTML preview page:
+
+1. Read the HTML template from `preview-template.html` in the skill directory
+2. Read the `.oss-uploader-mapping.json` file to get the file mappings
+3. Transform the mapping data into JavaScript array format:
+   ```javascript
+   [
+     {"filename": "example.png", "url": "https://..."},
+     {"filename": "example2.png", "url": "https://..."}
+   ]
+   ```
+4. Replace `{{FILES_DATA}}` in the template with the actual data
+5. Write the generated HTML to a temporary file (e.g., `.oss-preview.html` in the project root)
+6. Open the HTML file in the default browser using the appropriate command:
+   - macOS: `open .oss-preview.html`
+   - Linux: `xdg-open .oss-preview.html`
+   - Windows: `start .oss-preview.html`
+7. Inform the user that the preview has been opened
+
+### Preview Page Features
+
+The generated HTML preview page includes:
+- Beautiful gradient background with modern design
+- Statistics showing total files and image count
+- Grid layout with responsive cards for each file
+- Image thumbnails with click-to-enlarge modal
+- One-click copy URL functionality with visual feedback
+- Direct link to open files in new tab
+- Mobile-responsive design
+- Toast notifications for copy actions
