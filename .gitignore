@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.ossrc.json
+.ossrc.yaml
+oss.config.js

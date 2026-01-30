@@ -1,0 +1,14 @@
+{
+  "name": "oss-uploader-marketplace",
+  "description": "Aliyun OSS uploader plugin for Claude Code",
+  "owner": {
+    "name": "lorain"
+  },
+  "plugins": [
+    {
+      "name": "oss-uploader",
+      "source": "./plugins/oss-uploader",
+      "description": "Upload files and directories to Aliyun OSS (Object Storage Service)"
+    }
+  ]
+}
