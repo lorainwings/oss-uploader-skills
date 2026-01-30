@@ -14,9 +14,11 @@ A Claude Code plugin that provides skills for uploading files to Aliyun OSS (Obj
 
 ### Method 1: Install from GitHub (Recommended)
 
+Once the repository is published on GitHub:
+
 ```bash
 # Add the marketplace
-/plugin marketplace add lorainwings/aliyun-oss-uploader
+/plugin marketplace add lorainwings/oss-uploader
 
 # Install the plugin
 /plugin install oss-uploader
@@ -26,10 +28,10 @@ A Claude Code plugin that provides skills for uploading files to Aliyun OSS (Obj
 
 ```bash
 # Clone the repository
-git clone https://github.com/lorainwings/aliyun-oss-uploader.git
+git clone https://github.com/lorainwings/oss-uploader.git
 
 # Add the marketplace
-/plugin marketplace add /path/to/aliyun-oss-uploader
+/plugin marketplace add /path/to/oss-uploader
 
 # Install the plugin
 /plugin install oss-uploader
@@ -109,9 +111,24 @@ The skill helps you:
 - Generate mapping files for deployment tracking
 - Handle common issues and errors
 
+## Plugin Structure
+
+```
+oss-uploader/
+├── marketplace.json                    # Marketplace configuration
+├── plugins/
+│   └── oss-uploader/
+│       ├── plugin.json                 # Plugin metadata
+│       └── skills/
+│           └── oss-uploader/
+│               └── SKILL.md            # Skill definition
+├── LICENSE
+└── README.md
+```
+
 ## Related Links
 
-- [OSS Uploader CLI Tool](https://github.com/lorainwings/aliyun-oss-uploader)
+- [Original OSS Uploader CLI Tool](https://github.com/lorainwings/aliyun-oss-uploader)
 - [Aliyun OSS Documentation](https://www.alibabacloud.com/help/en/oss/)
 
 ## License
