@@ -169,5 +169,25 @@ When executing this skill:
 3. Understand the user's upload requirements
 4. Construct the appropriate command with options
 5. Execute the upload and verify success
-6. Provide the mapping file location if generated
-7. Offer next steps (e.g., CDN configuration, URL usage)
+6. **IMPORTANT**: After successful upload, ALWAYS read the `.oss-uploader-mapping.json` file and display a formatted mapping table showing:
+   - Original filename in the first column
+   - OSS access URL in the second column as a clickable markdown link with custom text color
+   - Use markdown table format for clear presentation
+7. Display URLs as markdown links with green color using HTML: `<span style="color: #00cc00">[URL]</span>`
+8. Provide the mapping file location if generated
+9. Offer next steps (e.g., CDN configuration, URL usage)
+
+### Output Format Example
+
+After upload completion, display:
+
+```markdown
+## 文件上传映射表
+
+| 原始文件名 | OSS访问地址 |
+|-----------|------------|
+| example.png | <span style="color: #00cc00">https://bucket.oss-region.aliyuncs.com/path/example.hash.png</span> |
+| example2.png | <span style="color: #00cc00">https://bucket.oss-region.aliyuncs.com/path/example2.hash.png</span> |
+```
+
+Use bright green color (#00cc00) for better visibility against dark backgrounds.
