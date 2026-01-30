@@ -11,8 +11,14 @@ description: Upload files and directories to Aliyun OSS (Object Storage Service)
 
 在继续之前，请验证：
 1. 工具已安装：`npm list -g @atomfe/oss-uploader` 或提供安装选项
-2. OSS 凭证已配置（通过配置文件或环境变量）
-3. 目标文件/目录存在
+2. **环境变量自检**：检查以下环境变量是否已设置
+   - `OSS_REGION`: OSS 区域（例如：oss-cn-hangzhou）
+   - `OSS_ACCESS_KEY_ID`: 访问密钥 ID
+   - `OSS_ACCESS_KEY_SECRET`: 访问密钥密文
+   - `OSS_BUCKET`: 存储桶名称
+   - 如果环境变量未设置，提示用户配置或使用配置文件
+3. OSS 凭证已配置（通过配置文件或环境变量）
+4. 目标文件/目录存在
 
 ## 配置
 
@@ -113,7 +119,11 @@ oss-uploader info
 
 1. **了解需求**：询问以下内容：
    - 要上传哪些文件/目录
-   - OSS 存储桶中的目标路径
+   - **OSS 存储桶中的目标保存路径**：
+     - 询问用户希望将文件保存到哪个路径
+     - 提供默认路径：`/prd/ha/skills-resource/YYYYMMDD`（其中 YYYYMMDD 为当前日期，例如：20260130）
+     - 示例：`/prd/ha/skills-resource/20260130/`
+     - 用户可以自定义路径或使用默认路径
    - 是否使用内容哈希
    - 文件过滤需求
    - 是否生成映射文件
@@ -166,17 +176,27 @@ oss-uploader upload ./build -t production/ -m ./mapping.json
 ## 实现方法
 
 执行此技能时：
-1. 检查工具是否已安装，如果未安装则提供安装选项
-2. 验证配置是否存在或帮助创建配置
-3. 了解用户的上传需求
-4. 使用适当的选项构建命令
-5. 执行上传并验证成功
-6. **重要**：上传成功后，始终读取 `.oss-uploader-mapping.json` 文件并：
+1. **环境变量自检**：
+   - 使用 `echo $OSS_REGION $OSS_ACCESS_KEY_ID $OSS_ACCESS_KEY_SECRET $OSS_BUCKET` 检查环境变量
+   - 如果任何必需的环境变量未设置，提示用户：
+     - 设置环境变量，或
+     - 使用配置文件（.ossrc.json、.ossrc.yaml 或 oss.config.js）
+   - 显示当前环境变量状态（隐藏敏感信息，只显示是否已设置）
+2. 检查工具是否已安装，如果未安装则提供安装选项
+3. 验证配置是否存在或帮助创建配置
+4. **询问保存路径**：
+   - 询问用户希望将文件保存到 OSS 的哪个路径
+   - 提供默认路径：`/prd/ha/skills-resource/YYYYMMDD`（例如：`/prd/ha/skills-resource/20260130`）
+   - 用户可以选择使用默认路径或自定义路径
+5. 了解用户的其他上传需求（文件过滤、内容哈希等）
+6. 使用适当的选项构建命令
+7. 执行上传并验证成功
+8. **重要**：上传成功后，始终读取 `.oss-uploader-mapping.json` 文件并：
    - 在终端中使用绿色 ANSI 颜色代码显示 URL
    - 使用上传的文件生成 HTML 预览页面
    - 自动在默认浏览器中打开预览
-7. 提供映射文件位置（如果已生成）
-8. 提供后续步骤建议（例如：CDN 配置、URL 使用）
+9. 提供映射文件位置（如果已生成）
+10. 提供后续步骤建议（例如：CDN 配置、URL 使用）
 
 ### 终端输出格式
 
