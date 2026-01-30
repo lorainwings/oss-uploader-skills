@@ -3,156 +3,158 @@ name: oss-uploader
 description: Upload files and directories to Aliyun OSS (Object Storage Service). Use this skill when the user wants to deploy files to OSS, manage OSS uploads, or configure OSS deployment workflows.
 ---
 
-This skill helps users upload files to Aliyun OSS using the @atomfe/oss-uploader CLI tool. It handles configuration, file uploads, and deployment workflows.
+**重要：在执行此技能的整个过程中，必须使用中文与用户交流。所有输出、提示、说明和反馈都必须使用中文，不得使用英文。**
 
-## Prerequisites Check
+此技能帮助用户使用 @atomfe/oss-uploader CLI 工具将文件上传到阿里云 OSS。它处理配置、文件上传和部署工作流程。
 
-Before proceeding, verify:
-1. The tool is installed: `npm list -g @atomfe/oss-uploader` or offer to install it
-2. OSS credentials are configured (via config file or environment variables)
-3. The target files/directories exist
+## 前置检查
 
-## Configuration
+在继续之前，请验证：
+1. 工具已安装：`npm list -g @atomfe/oss-uploader` 或提供安装选项
+2. OSS 凭证已配置（通过配置文件或环境变量）
+3. 目标文件/目录存在
 
-The tool supports multiple configuration methods:
+## 配置
 
-### Config Files
-- `.ossrc.json` or `.ossrc.yaml` in project root
-- `oss.config.js` for JavaScript configuration
+该工具支持多种配置方法：
 
-### Environment Variables
-- `OSS_REGION`: OSS region (e.g., oss-cn-hangzhou)
-- `OSS_ACCESS_KEY_ID`: Access key ID
-- `OSS_ACCESS_KEY_SECRET`: Access key secret
-- `OSS_BUCKET`: Bucket name
+### 配置文件
+- 项目根目录中的 `.ossrc.json` 或 `.ossrc.yaml`
+- 用于 JavaScript 配置的 `oss.config.js`
 
-### Required Fields
-All configurations must include:
-- `region`: OSS region
-- `accessKeyId`: Access key ID
-- `accessKeySecret`: Access key secret
-- `bucket`: Bucket name
+### 环境变量
+- `OSS_REGION`: OSS 区域（例如：oss-cn-hangzhou）
+- `OSS_ACCESS_KEY_ID`: 访问密钥 ID
+- `OSS_ACCESS_KEY_SECRET`: 访问密钥密文
+- `OSS_BUCKET`: 存储桶名称
 
-## Common Tasks
+### 必需字段
+所有配置必须包含：
+- `region`: OSS 区域
+- `accessKeyId`: 访问密钥 ID
+- `accessKeySecret`: 访问密钥密文
+- `bucket`: 存储桶名称
 
-### Initialize Configuration
-Help users create a configuration file:
+## 常见任务
+
+### 初始化配置
+帮助用户创建配置文件：
 ```bash
 oss-uploader init
 ```
 
-### Upload Single File
+### 上传单个文件
 ```bash
 oss-uploader upload <file-path>
 ```
 
-### Upload Directory
+### 上传目录
 ```bash
 oss-uploader upload <directory> -t <target-path>
 ```
 
-### Upload with Filtering
+### 带过滤的上传
 ```bash
-# Include specific patterns
+# 包含特定模式
 oss-uploader upload ./dist -i "**/*.js" "**/*.css"
 
-# Exclude patterns
+# 排除模式
 oss-uploader upload ./dist -e "**/*.map" "**/*.txt"
 ```
 
-### Generate Mapping File
-Create a mapping file for tracking uploads:
+### 生成映射文件
+创建映射文件以跟踪上传：
 ```bash
 oss-uploader upload ./dist -m ./upload-map.json
 ```
 
-### Content Hash
-Add content hash to filenames (enabled by default):
+### 内容哈希
+为文件名添加内容哈希（默认启用）：
 ```bash
 oss-uploader upload ./dist -h
 ```
 
-## Available Commands
+## 可用命令
 
 ### upload
-Upload files or directories to OSS.
+将文件或目录上传到 OSS。
 
-Options:
-- `-t, --target <path>`: Target path in OSS bucket
-- `-c, --config <file>`: Configuration file path
-- `-r, --recursive`: Recursive upload (default: true)
-- `-i, --include <patterns...>`: Include file patterns (glob)
-- `-e, --exclude <patterns...>`: Exclude file patterns (glob)
-- `-m, --mapping <file>`: Generate mapping file
-- `-h, --content-hash`: Add content hash to filenames (default: true)
-- `-v, --verbose`: Verbose output
+选项：
+- `-t, --target <path>`: OSS 存储桶中的目标路径
+- `-c, --config <file>`: 配置文件路径
+- `-r, --recursive`: 递归上传（默认：true）
+- `-i, --include <patterns...>`: 包含文件模式（glob）
+- `-e, --exclude <patterns...>`: 排除文件模式（glob）
+- `-m, --mapping <file>`: 生成映射文件
+- `-h, --content-hash`: 为文件名添加内容哈希（默认：true）
+- `-v, --verbose`: 详细输出
 
 ### list
-List files in OSS bucket:
+列出 OSS 存储桶中的文件：
 ```bash
 oss-uploader list
 ```
 
 ### delete
-Delete files from OSS:
+从 OSS 删除文件：
 ```bash
 oss-uploader delete <file-path>
 ```
 
 ### info
-Show bucket information:
+显示存储桶信息：
 ```bash
 oss-uploader info
 ```
 
-## Workflow Guidance
+## 工作流程指导
 
-When helping users with OSS uploads:
+在帮助用户进行 OSS 上传时：
 
-1. **Understand Requirements**: Ask about:
-   - What files/directories to upload
-   - Target path in OSS bucket
-   - Whether to use content hashing
-   - File filtering needs
-   - Whether to generate mapping file
+1. **了解需求**：询问以下内容：
+   - 要上传哪些文件/目录
+   - OSS 存储桶中的目标路径
+   - 是否使用内容哈希
+   - 文件过滤需求
+   - 是否生成映射文件
 
-2. **Check Configuration**: Verify OSS credentials are set up properly
+2. **检查配置**：验证 OSS 凭证是否正确设置
 
-3. **Recommend Best Practices**:
-   - Use content hashing for cache busting
-   - Generate mapping files for CI/CD integration
-   - Use include/exclude patterns for selective uploads
-   - Use verbose mode for debugging
+3. **推荐最佳实践**：
+   - 使用内容哈希进行缓存清除
+   - 为 CI/CD 集成生成映射文件
+   - 使用包含/排除模式进行选择性上传
+   - 使用详细模式进行调试
 
-4. **Handle Common Issues**:
-   - Missing credentials: Guide to set up config file or env vars
-   - Permission errors: Check OSS bucket permissions
-   - File not found: Verify source paths exist
+4. **处理常见问题**：
+   - 缺少凭证：指导设置配置文件或环境变量
+   - 权限错误：检查 OSS 存储桶权限
+   - 文件未找到：验证源路径是否存在
 
-## Security Considerations
+## 安全注意事项
 
-- Never expose access keys in code or logs
-- Recommend using environment variables in CI/CD
-- Suggest using RAM roles for production deployments
-- Remind users to add config files to .gitignore
+- 永远不要在代码或日志中暴露访问密钥
+- 建议在 CI/CD 中使用环境变量
+- 建议在生产部署中使用 RAM 角色
+- 提醒用户将配置文件添加到 .gitignore
 
-## Example Workflows
+## 示例工作流程
 
-### Deploy Frontend Build
+### 部署前端构建
 ```bash
-# Upload dist folder to static directory with mapping
+# 将 dist 文件夹上传到 static 目录并生成映射
 oss-uploader upload ./dist -t static/ -m ./upload-map.json -v
 ```
 
-### Deploy with Filtering
+### 带过滤的部署
 ```bash
-# Upload only JS and CSS files
+# 仅上传 JS 和 CSS 文件
 oss-uploader upload ./dist -t assets/ -i "**/*.js" "**/*.css" -e "**/*.map"
 ```
 
-### CI/CD Integration
+### CI/CD 集成
 ```bash
-# Use environment variables for credentials
+# 使用环境变量作为凭证
 export OSS_REGION=oss-cn-hangzhou
 export OSS_ACCESS_KEY_ID=your-key-id
 export OSS_ACCESS_KEY_SECRET=your-key-secret
@@ -161,24 +163,24 @@ export OSS_BUCKET=your-bucket
 oss-uploader upload ./build -t production/ -m ./mapping.json
 ```
 
-## Implementation Approach
+## 实现方法
 
-When executing this skill:
-1. Check if the tool is installed, offer to install if not
-2. Verify configuration exists or help create it
-3. Understand the user's upload requirements
-4. Construct the appropriate command with options
-5. Execute the upload and verify success
-6. **IMPORTANT**: After successful upload, ALWAYS read the `.oss-uploader-mapping.json` file and:
-   - Display URLs in terminal using green ANSI color codes
-   - Generate an HTML preview page with the uploaded files
-   - Automatically open the preview in the default browser
-7. Provide the mapping file location if generated
-8. Offer next steps (e.g., CDN configuration, URL usage)
+执行此技能时：
+1. 检查工具是否已安装，如果未安装则提供安装选项
+2. 验证配置是否存在或帮助创建配置
+3. 了解用户的上传需求
+4. 使用适当的选项构建命令
+5. 执行上传并验证成功
+6. **重要**：上传成功后，始终读取 `.oss-uploader-mapping.json` 文件并：
+   - 在终端中使用绿色 ANSI 颜色代码显示 URL
+   - 使用上传的文件生成 HTML 预览页面
+   - 自动在默认浏览器中打开预览
+7. 提供映射文件位置（如果已生成）
+8. 提供后续步骤建议（例如：CDN 配置、URL 使用）
 
-### Terminal Output Format
+### 终端输出格式
 
-Display URLs in this compact format:
+以这种紧凑格式显示 URL：
 
 ```
 ✓ 上传成功！
@@ -189,35 +191,36 @@ example2.png: \033[32mhttps://bucket.oss-region.aliyuncs.com/path/example2.hash.
 🌐 正在生成预览页面...
 ```
 
-### HTML Preview Generation
+### HTML 预览生成
 
-After displaying terminal output, generate an HTML preview page:
+显示终端输出后，生成 HTML 预览页面：
 
-1. Read the HTML template from `preview-template.html` in the skill directory
-2. Read the `.oss-uploader-mapping.json` file to get the file mappings
-3. Transform the mapping data into JavaScript array format:
+1. 从技能目录中的 `preview-template.html` 读取 HTML 模板
+2. 读取 `.oss-uploader-mapping.json` 文件以获取文件映射
+3. 将映射数据转换为 JavaScript 数组格式：
    ```javascript
    [
      {"filename": "example.png", "url": "https://..."},
      {"filename": "example2.png", "url": "https://..."}
    ]
    ```
-4. Replace `{{FILES_DATA}}` in the template with the actual data
-5. Write the generated HTML to a temporary file (e.g., `.oss-preview.html` in the project root)
-6. Open the HTML file in the default browser using the appropriate command:
+4. 用实际数据替换模板中的 `{{FILES_DATA}}`
+5. 将生成的 HTML 写入临时文件（例如：项目根目录中的 `.oss-preview.html`）
+6. 使用适当的命令在默认浏览器中打开 HTML 文件：
    - macOS: `open .oss-preview.html`
    - Linux: `xdg-open .oss-preview.html`
    - Windows: `start .oss-preview.html`
-7. Inform the user that the preview has been opened
+7. 告知用户预览已打开
 
-### Preview Page Features
+### 预览页面特性
 
-The generated HTML preview page includes:
-- Beautiful gradient background with modern design
-- Statistics showing total files and image count
-- Grid layout with responsive cards for each file
-- Image thumbnails with click-to-enlarge modal
-- One-click copy URL functionality with visual feedback
-- Direct link to open files in new tab
-- Mobile-responsive design
-- Toast notifications for copy actions
+生成的 HTML 预览页面包括：
+- 精美的渐变背景和现代化设计
+- 显示总文件数和图片数量的统计信息
+- 每个文件的响应式卡片网格布局
+- 图片缩略图，点击可放大查看
+- 一键复制 URL 功能，带视觉反馈
+- 直接在新标签页中打开文件的链接
+- 移动端响应式设计
+- 复制操作的提示通知
+
