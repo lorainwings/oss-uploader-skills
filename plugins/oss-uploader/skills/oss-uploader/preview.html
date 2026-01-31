@@ -289,16 +289,26 @@
     <div class="toast" id="toast">链接已复制</div>
 
     <script>
+        // 映射数据将在生成时注入
+        const MAPPING_DATA = null; // __MAPPING_DATA_PLACEHOLDER__
+
         let files = [];
 
-        // 从 .tmp/mapping.json 加载数据
+        // 加载数据（优先使用内嵌数据，回退到 fetch）
         async function loadData() {
             try {
-                const response = await fetch('.tmp/mapping.json');
-                if (!response.ok) {
-                    throw new Error('无法加载映射文件');
+                let data;
+                if (MAPPING_DATA) {
+                    // 使用内嵌数据
+                    data = MAPPING_DATA;
+                } else {
+                    // 回退到 fetch（用于本地开发/测试）
+                    const response = await fetch('.tmp/mapping.json');
+                    if (!response.ok) {
+                        throw new Error('无法加载映射文件');
+                    }
+                    data = await response.json();
                 }
-                const data = await response.json();
                 // 支持两种格式：直接数组或 { files: [...] }
                 if (Array.isArray(data)) {
                     files = data;
@@ -312,7 +322,7 @@
                 }
                 renderFiles();
             } catch (error) {
-                showError(error.message + '。请确保 .tmp/mapping.json 文件存在。');
+                showError(error.message + '。请确保映射数据已正确注入或 .tmp/mapping.json 文件存在。');
             }
         }
 

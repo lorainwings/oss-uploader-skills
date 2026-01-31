@@ -64,25 +64,26 @@ mkdir -p /tmp/oss-uploader
 ### 5. 展示结果
 
 - 上传成功后，在终端简要显示上传结果
-- 将映射文件从 `/tmp/oss-uploader/mapping.json` 复制到 `<skill-dir>/.tmp/mapping.json`（preview.html 需要相对路径访问）
+- 将映射数据注入到预览页面 HTML 中
 - 保存使用的目录路径到 `/tmp/oss-uploader/last-path`
-- 直接打开 `<skill-dir>/preview.html` 预览页面
+- 打开注入数据后的预览页面
 
 ```bash
-# 确保 skill 临时目录存在（用于 preview.html）
-mkdir -p <skill-dir>/.tmp
+# 读取映射数据
+MAPPING_JSON=$(cat /tmp/oss-uploader/mapping.json)
 
-# 复制映射文件到 skill 目录（preview.html 需要相对路径访问）
-cp /tmp/oss-uploader/mapping.json <skill-dir>/.tmp/mapping.json
+# 复制 preview.html 到临时目录并注入数据
+cp <skill-dir>/preview.html /tmp/oss-uploader/preview.html
+sed -i '' "s|const MAPPING_DATA = null;|const MAPPING_DATA = ${MAPPING_JSON};|" /tmp/oss-uploader/preview.html
 
 # 保存上次使用的目录路径到全局临时目录
 echo "<目录路径>" > /tmp/oss-uploader/last-path
 
-# 打开预览页面
-open <skill-dir>/preview.html
+# 打开注入数据后的预览页面
+open /tmp/oss-uploader/preview.html
 ```
 
-**注意**：预览页面会自动从 `.tmp/mapping.json` 加载数据，无需动态生成 HTML。
+**注意**：映射数据直接内嵌到 HTML 中，避免浏览器 `file://` 协议下 CORS 限制导致无法加载本地 JSON 文件。
 
 ## Examples
 

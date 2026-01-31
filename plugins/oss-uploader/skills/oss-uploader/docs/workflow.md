@@ -78,21 +78,25 @@ oss-uploader upload ./dist -t assets/ -i "**/*.js" "**/*.css" -e "**/*.map"
 
 上传成功后，按以下步骤展示预览：
 
-1. 将映射文件从 `/tmp/oss-uploader/mapping.json` 复制到 `<skill-dir>/.tmp/mapping.json`
-2. 直接打开 `<skill-dir>/preview.html` 预览页面
+1. 读取映射数据
+2. 复制 preview.html 到临时目录并注入数据
+3. 打开注入数据后的预览页面
 
 ```bash
-# 确保 skill 临时目录存在
-mkdir -p <skill-dir>/.tmp
+# 读取映射数据
+MAPPING_JSON=$(cat /tmp/oss-uploader/mapping.json)
 
-# 复制映射文件到 skill 目录（preview.html 需要相对路径访问）
-cp /tmp/oss-uploader/mapping.json <skill-dir>/.tmp/mapping.json
+# 复制 preview.html 到临时目录并注入数据
+cp <skill-dir>/preview.html /tmp/oss-uploader/preview.html
+sed -i '' "s|const MAPPING_DATA = null;|const MAPPING_DATA = ${MAPPING_JSON};|" /tmp/oss-uploader/preview.html
 
-# 打开预览页面
-open <skill-dir>/preview.html
+# 打开注入数据后的预览页面
+open /tmp/oss-uploader/preview.html
 ```
 
-**注意**：预览页面会自动从 `.tmp/mapping.json` 加载数据，无需动态生成 HTML。
+**为什么要注入数据？**
+
+浏览器通过 `file://` 协议打开本地 HTML 文件时，由于 CORS 安全限制，无法使用 `fetch` 读取本地文件。将映射数据直接内嵌到 HTML 中可以绕过这个限制。
 
 ## 安全注意事项
 
