@@ -1,13 +1,8 @@
 {
   "name": "oss-uploader",
-  "version": "1.0.0",
   "description": "Upload files and directories to Aliyun OSS (Object Storage Service)",
-  "author": "lorain",
-  "license": "MIT",
-  "skills": [
-    {
-      "name": "oss-uploader",
-      "path": "skills/oss-uploader/SKILL.md"
-    }
-  ]
+  "author": {
+    "name": "lorain",
+    "email": "lorainwings@gmail.com"
+  }
 }
