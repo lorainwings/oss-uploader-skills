@@ -6,6 +6,14 @@ dependencies: "@atomfe/oss-uploader>=1.0.0"
 
 **重要：在执行此技能的整个过程中，必须使用中文与用户交流。所有输出、提示、说明和反馈都必须使用中文，不得使用英文。**
 
+## Skill 目录定义
+
+**重要**：本文档中所有 `<skill-dir>` 占位符必须替换为此 SKILL.md 文件所在的目录的绝对路径。
+
+例如，如果此 SKILL.md 文件位于 `/Users/xxx/.claude/plugins/oss-uploader/skills/oss-uploader/SKILL.md`，则 `<skill-dir>` 应替换为 `/Users/xxx/.claude/plugins/oss-uploader/skills/oss-uploader`。
+
+在执行任何包含 `<skill-dir>` 的命令之前，必须先确定此文件的绝对路径，然后将所有 `<skill-dir>` 替换为该路径。
+
 ## Overview
 
 此技能帮助用户使用 @atomfe/oss-uploader CLI 工具将文件上传到阿里云 OSS。它处理配置、文件上传和部署工作流程。
