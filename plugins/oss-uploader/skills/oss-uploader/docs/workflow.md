@@ -76,27 +76,23 @@ oss-uploader upload ./dist -t assets/ -i "**/*.js" "**/*.css" -e "**/*.map"
 
 ## 展示预览页面
 
-上传成功后，按以下步骤展示预览：
-
-1. 读取映射数据
-2. 复制 preview.html 到临时目录并注入数据
-3. 打开注入数据后的预览页面
+上传成功后，使用 Node.js 脚本将映射数据注入到预览页面模板中：
 
 ```bash
-# 读取映射数据
-MAPPING_JSON=$(cat /tmp/oss-uploader/mapping.json)
+# 使用 node 脚本注入数据并生成预览页面
+node <skill-dir>/scripts/inject.js \
+  <skill-dir>/template/index.html \
+  /tmp/oss-uploader/mapping.json \
+  /tmp/oss-uploader/preview.html
 
-# 复制 preview.html 到临时目录并注入数据
-cp <skill-dir>/preview.html /tmp/oss-uploader/preview.html
-sed -i '' "s|const MAPPING_DATA = null;|const MAPPING_DATA = ${MAPPING_JSON};|" /tmp/oss-uploader/preview.html
-
-# 打开注入数据后的预览页面
+# 打开预览页面
 open /tmp/oss-uploader/preview.html
 ```
 
-**为什么要注入数据？**
+**为什么使用 Node.js 脚本？**
 
-浏览器通过 `file://` 协议打开本地 HTML 文件时，由于 CORS 安全限制，无法使用 `fetch` 读取本地文件。将映射数据直接内嵌到 HTML 中可以绕过这个限制。
+1. **多行 JSON 支持**：sed 命令无法正确处理包含换行符的 JSON 数据，会导致替换失败
+2. **CORS 限制**：浏览器通过 `file://` 协议打开本地 HTML 文件时，无法使用 `fetch` 读取本地文件。将映射数据直接内嵌到 HTML 中可以绕过这个限制
 
 ## 安全注意事项
 

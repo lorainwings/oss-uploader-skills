@@ -64,26 +64,28 @@ mkdir -p /tmp/oss-uploader
 ### 5. 展示结果
 
 - 上传成功后，在终端简要显示上传结果
-- 将映射数据注入到预览页面 HTML 中
+- 使用 Node.js 脚本将映射数据注入到预览页面
 - 保存使用的目录路径到 `/tmp/oss-uploader/last-path`
-- 打开注入数据后的预览页面
+- 打开生成的预览页面
 
 ```bash
-# 读取映射数据
-MAPPING_JSON=$(cat /tmp/oss-uploader/mapping.json)
+# 确保临时目录存在
+[ -d "/tmp/oss-uploader" ] || mkdir -p /tmp/oss-uploader
 
-# 复制 preview.html 到临时目录并注入数据
-cp <skill-dir>/preview.html /tmp/oss-uploader/preview.html
-sed -i '' "s|const MAPPING_DATA = null;|const MAPPING_DATA = ${MAPPING_JSON};|" /tmp/oss-uploader/preview.html
+# 使用 node 脚本注入数据并生成预览页面
+node <skill-dir>/scripts/inject.js \
+  <skill-dir>/template/index.html \
+  /tmp/oss-uploader/mapping.json \
+  /tmp/oss-uploader/preview.html
 
-# 保存上次使用的目录路径到全局临时目录
+# 保存上次使用的目录路径
 echo "<目录路径>" > /tmp/oss-uploader/last-path
 
-# 打开注入数据后的预览页面
+# 打开预览页面
 open /tmp/oss-uploader/preview.html
 ```
 
-**注意**：映射数据直接内嵌到 HTML 中，避免浏览器 `file://` 协议下 CORS 限制导致无法加载本地 JSON 文件。
+**注意**：使用 Node.js 脚本注入数据可以正确处理多行 JSON，避免 sed 命令因换行符导致替换失败。映射数据直接内嵌到 HTML 中，绕过浏览器 `file://` 协议下的 CORS 限制。
 
 ## Examples
 
