@@ -5,3 +5,6 @@ node_modules/
 .ossrc.json
 .ossrc.yaml
 oss.config.js
+
+# OSS Uploader 临时文件目录
+plugins/oss-uploader/skills/oss-uploader/.tmp/
