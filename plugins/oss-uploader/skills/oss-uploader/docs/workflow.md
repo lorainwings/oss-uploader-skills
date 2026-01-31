@@ -30,11 +30,11 @@
 
 ### 上次使用的目录
 
-检查是否存在上次使用的目录记录。上次使用的目录保存在 skill 目录的 `.tmp/last-path` 文件中。
+检查是否存在上次使用的目录记录。上次使用的目录保存在全局临时目录 `/tmp/oss-uploader/last-path` 文件中。
 
 ```bash
 # 检查上次使用的目录
-cat <skill-dir>/.tmp/last-path 2>/dev/null || echo ""
+cat /tmp/oss-uploader/last-path 2>/dev/null || echo ""
 ```
 
 ### 路径选择流程
@@ -48,11 +48,11 @@ cat <skill-dir>/.tmp/last-path 2>/dev/null || echo ""
 
 ### 保存上次使用的目录
 
-上传成功后，将使用的目录路径保存到 `<skill-dir>/.tmp/last-path` 文件中：
+上传成功后，将使用的目录路径保存到 `/tmp/oss-uploader/last-path` 文件中：
 
 ```bash
-mkdir -p <skill-dir>/.tmp
-echo "prd/ha/skills-resource/20260131/" > <skill-dir>/.tmp/last-path
+mkdir -p /tmp/oss-uploader
+echo "prd/ha/skills-resource/20260131/" > /tmp/oss-uploader/last-path
 ```
 
 这样下次上传时可以快速选择上次使用的目录。
@@ -63,7 +63,8 @@ echo "prd/ha/skills-resource/20260131/" > <skill-dir>/.tmp/last-path
 
 ```bash
 # 将 dist 文件夹上传到 static 目录并生成映射
-oss-uploader upload ./dist -t static/ -m <skill-dir>/.tmp/mapping.json -v
+mkdir -p /tmp/oss-uploader
+oss-uploader upload ./dist -t static/ -m /tmp/oss-uploader/mapping.json -v
 ```
 
 ### 带过滤的部署
@@ -77,11 +78,16 @@ oss-uploader upload ./dist -t assets/ -i "**/*.js" "**/*.css" -e "**/*.map"
 
 上传成功后，按以下步骤展示预览：
 
-1. 确保 `<skill-dir>/.tmp/` 目录存在
-2. 映射文件已保存到 `<skill-dir>/.tmp/mapping.json`
-3. 直接打开 `<skill-dir>/preview.html` 预览页面
+1. 将映射文件从 `/tmp/oss-uploader/mapping.json` 复制到 `<skill-dir>/.tmp/mapping.json`
+2. 直接打开 `<skill-dir>/preview.html` 预览页面
 
 ```bash
+# 确保 skill 临时目录存在
+mkdir -p <skill-dir>/.tmp
+
+# 复制映射文件到 skill 目录（preview.html 需要相对路径访问）
+cp /tmp/oss-uploader/mapping.json <skill-dir>/.tmp/mapping.json
+
 # 打开预览页面
 open <skill-dir>/preview.html
 ```

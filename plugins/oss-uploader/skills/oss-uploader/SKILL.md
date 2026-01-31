@@ -41,7 +41,7 @@ dependencies: "@atomfe/oss-uploader>=1.0.0"
 
 ### 3. 询问保存路径
 
-- 检查上次使用的目录：`cat <skill-dir>/.tmp/last-path 2>/dev/null`
+- 检查上次使用的目录：`cat /tmp/oss-uploader/last-path 2>/dev/null`
 - 如果有上次目录，询问用户是否使用上次的目录
 - 如果用户选择不使用或没有上次目录，使用交互式目录浏览器：`oss-uploader browse <目录前缀>`
 
@@ -49,24 +49,34 @@ dependencies: "@atomfe/oss-uploader>=1.0.0"
 
 ### 4. 执行上传
 
-使用适当的选项构建命令并执行上传。常用命令详见 [commands.md](docs/commands.md)。
+使用适当的选项构建命令并执行上传。
+
+**重要**：执行上传前，必须先创建临时目录：
+
+```bash
+mkdir -p /tmp/oss-uploader
+```
+
+映射文件路径使用 `-m /tmp/oss-uploader/mapping.json`。
+
+常用命令详见 [commands.md](docs/commands.md)。
 
 ### 5. 展示结果
 
 - 上传成功后，在终端简要显示上传结果
-- 保存使用的目录路径到 `<skill-dir>/.tmp/last-path`
-- 将映射文件复制到 `<skill-dir>/.tmp/mapping.json`
+- 将映射文件从 `/tmp/oss-uploader/mapping.json` 复制到 `<skill-dir>/.tmp/mapping.json`（preview.html 需要相对路径访问）
+- 保存使用的目录路径到 `/tmp/oss-uploader/last-path`
 - 直接打开 `<skill-dir>/preview.html` 预览页面
 
 ```bash
-# 确保临时目录存在
+# 确保 skill 临时目录存在（用于 preview.html）
 mkdir -p <skill-dir>/.tmp
 
-# 复制映射文件（oss-uploader 生成的映射文件）
-cp <映射文件路径> <skill-dir>/.tmp/mapping.json
+# 复制映射文件到 skill 目录（preview.html 需要相对路径访问）
+cp /tmp/oss-uploader/mapping.json <skill-dir>/.tmp/mapping.json
 
-# 保存上次使用的目录路径
-echo "<目录路径>" > <skill-dir>/.tmp/last-path
+# 保存上次使用的目录路径到全局临时目录
+echo "<目录路径>" > /tmp/oss-uploader/last-path
 
 # 打开预览页面
 open <skill-dir>/preview.html
@@ -91,7 +101,8 @@ oss-uploader upload <directory> -t <target-path>
 ### 部署前端构建
 
 ```bash
-oss-uploader upload ./dist -t static/ -m <skill-dir>/.tmp/mapping.json -v
+mkdir -p /tmp/oss-uploader
+oss-uploader upload ./dist -t static/ -m /tmp/oss-uploader/mapping.json -v
 ```
 
 ### 带过滤的部署
